@@ -22,7 +22,7 @@ export function Hero() {
           </a>
         </div>
         <p className="mt-4 text-sm text-gray-500">
-          No signup required. See your compliance status instantly.
+          Free 2-minute assessment. Get your results instantly.
         </p>
       </div>
     </section>

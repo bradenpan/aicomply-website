@@ -9,18 +9,21 @@ Test demand for an AI-in-employment compliance tool by driving traffic to a land
 Landing Page (Next.js on Vercel)
     |
     v
-Embedded Tally Form (compliance assessment - 7 questions)
+Custom-built multi-step form (React component, 11 questions)
     |
     v
-Tally End Screen (results summary + email capture + pricing preference)
+Email gate (required before seeing results)
     |
     v
-Data lives in Tally dashboard (export CSV for analysis)
+Results screen (conditional based on answers)
+    |
+    v
+Data lives in Google Sheet (each step writes a row update = partial submission capture)
 ```
 
 Traffic sources: Google Ads, LinkedIn Ads, LinkedIn organic, Reddit organic
 
-Analytics: Vercel Analytics (free) for page-level metrics. Tally's built-in analytics for form completion rates and drop-off.
+Analytics: Vercel Analytics (free) for page-level metrics. Google Sheet data for form completion rates, drop-off by question, and partial submissions.
 
 ---
 
@@ -61,26 +64,31 @@ Analytics: Vercel Analytics (free) for page-level metrics. Tally's built-in anal
 
 ---
 
-### PHASE 2: Build the Tally Form (1 hour)
+### PHASE 2: Build the Assessment Form (custom, built into site)
 
-#### Step 5: Create Tally account
-- [ ] Braden: Go to tally.so, create free account
-- [ ] Tally is fully free with unlimited forms and submissions
+#### Step 5: Set up Google Sheet for data collection
+- [ ] Create a Google Sheet with columns for each question + timestamp, session ID, completed flag
+- [ ] Create a Google Apps Script web app to accept POST requests and write to the sheet
+- [ ] Each form step writes to the sheet on advance (captures partial submissions automatically)
+- [ ] Users who drop off at any step still have their data captured up to that point
 
-#### Step 6: Build the compliance assessment form
-- [ ] Create new form in Tally
+#### Step 6: Build the multi-step assessment form (React component)
+- [ ] Custom-built into the Next.js site (no third-party form tool)
+- [ ] One question per step with progress bar
+- [ ] Each step writes answers to Google Sheet (partial submission capture)
+- [ ] Email gate after Q10 — user must enter email before seeing results
+- [ ] No branding, no submission limits, no monthly cost
 - [ ] Title: "AI Hiring Compliance Assessment"
 
 **Questions to build:**
 
 Q1 - Multiple choice (single select):
 "How many employees does your company have?"
-- 1-19
-- 20-49
-- 50-99
-- 100-199
-- 200-499
-- 500+
+- 1-49
+- 50-199
+- 200-999
+- 1,000-4,999
+- 5,000+
 
 Q2 - Multiple choice (single select):
 "Do you hire or interview candidates who work in Illinois?"
@@ -90,74 +98,98 @@ Q2 - Multiple choice (single select):
 (If "No" -> skip to end screen: "Based on your answer, Illinois HB 3773 may not apply to your company. However, if you hire remote workers who could be based in Illinois, you may still be covered. Enter your email for updates as more states pass similar laws.")
 
 Q3 - Checkboxes (multi-select):
-"Which of these tools do you use in your hiring process? Select all that apply."
-- Indeed (Sponsored Jobs / Indeed Resume)
-- LinkedIn (Recruiter / Job Slots / Sponsored Posts)
-- Greenhouse
-- Workday
-- iCIMS
-- Lever / Ashby
-- JazzHR / Breezy HR / Recruitee
-- BambooHR
-- HireVue / Spark Hire (video interviews)
-- TestGorilla / Codility / HackerRank (skills assessments)
-- Paradox (Olivia) / Phenom (chatbot screening)
-- Checkr / Sterling (background checks)
-- Lattice / 15Five / Culture Amp (performance management)
-- PayScale / Salary.com / Payfactors (compensation)
-- ChatGPT / AI to write job descriptions
-- Other AI-powered hiring tool (please specify)
+"Which of these tools do you use for recruiting? Select all that apply."
+(Covers: writing job descriptions, sourcing candidates, job posting, outreach)
+- LinkedIn Recruiter / Job Slots
+- Indeed Sponsored Jobs / Indeed Resume
+- Textio / Datapeople (job description optimization)
+- ChatGPT or other AI to write job descriptions
+- Appcast / PandoLogic / Joveo (programmatic job advertising)
+- hireEZ / SeekOut / Entelo (AI sourcing)
+- Gem / Beamery (recruiting CRM)
+- Workable AI sourcing
+- Other (please specify)
 - None of the above
 
-Q4 - Multiple choice (single select):
-"Do any of your hiring tools automatically screen, rank, filter, or score candidates?"
+Q4 - Checkboxes (multi-select):
+"Which of these tools do you use to screen or filter candidates? Select all that apply."
+(Covers: resume screening, chatbot screening, ATS filtering, background checks)
+- Greenhouse
+- Workday Recruiting
+- iCIMS
+- Lever / Ashby
+- SmartRecruiters / Jobvite
+- BambooHR / JazzHR / Breezy HR
+- Paradox (Olivia) / Phenom / XOR (chatbot screening)
+- Eightfold AI / HiredScore
+- Checkr / Sterling / HireRight (background checks)
+- Other (please specify)
+- None of the above
+
+Q5 - Checkboxes (multi-select):
+"Which of these tools do you use to evaluate or assess candidates? Select all that apply."
+(Covers: interviews, skills assessments, technical assessments, scoring)
+- HireVue / Spark Hire (video interviews)
+- TestGorilla / Criteria Corp / Harver (skills/personality assessments)
+- HackerRank / Codility / CodeSignal (technical assessments)
+- Metaview / BrightHire (AI interview notes/scorecards)
+- Otter.ai / Fireflies.ai (AI meeting notetakers)
+- Zoom AI Companion / Google Gemini in Meet / Microsoft Copilot in Teams (built-in AI summaries)
+- Crosschq / Searchlight (AI reference checks)
+- Sapia.ai / Humanly (AI-conducted interviews)
+- Other (please specify)
+- None of the above
+
+Q6 - Checkboxes (multi-select):
+"Which of these tools do you use for managing performance or compensation? Select all that apply."
+(Covers: performance reviews, compensation benchmarking, pay equity, engagement, monitoring)
+- Lattice / 15Five / Culture Amp (performance management)
+- Workday / SAP SuccessFactors / Oracle HCM (enterprise HR suite)
+- PayScale / Salary.com / Compa (compensation benchmarking)
+- Syndio / Trusaic (pay equity analysis)
+- Qualtrics / Viva Glint / Perceptyx (engagement surveys)
+- Eightfold / Gloat / Fuel50 (internal mobility / succession)
+- ActivTrak / Teramind / Hubstaff (employee monitoring)
+- Visier / ADP DataCloud (people analytics)
+- Other (please specify)
+- None of the above
+
+Q7 - Multiple choice (single select):
+"Do any of your tools automatically screen, rank, filter, or score candidates?"
 - Yes
 - No
 - I'm not sure
 
-Q5 - Multiple choice (single select):
+Q8 - Multiple choice (single select):
 "Do you currently provide written notice to job applicants that AI is being used in your hiring process?"
 - Yes, for all AI tools
 - Yes, for some AI tools
 - No
 - I didn't know this was required
 
-Q6 - Multiple choice (single select):
+Q9 - Multiple choice (single select):
 "Do you have a written company policy on AI use in employment decisions?"
 - Yes
 - No
 - We're working on one
 
-Q7 - Multiple choice (single select):
+Q10 - Multiple choice (single select):
+"Have you designated a point of contact for AI-related questions from applicants or employees?"
+- Yes
+- No
+- I didn't know this was required
+
+Q11 - Multiple choice (single select):
 "How concerned are you about compliance with AI hiring laws?"
 - Very concerned - this is a top priority
 - Somewhat concerned - it's on my radar
 - Not very concerned - we'll deal with it eventually
 - Not concerned at all
 
-#### Step 7: Build the end screen / results
+#### Step 7: Build the email gate + results screens
 
-Use Tally's conditional logic to show different end screens:
-
-**End Screen A** (selected 3+ tools from Q3 AND answered "No" or "I didn't know" to Q5):
-"You identified multiple AI-powered tools in your hiring process. Under Illinois HB 3773 (effective January 1, 2026), you are required to:
-- Provide written notice to every applicant and employee about each AI tool used
-- Include specific details: tool name, purpose, data collected, decisions affected, contact info
-- Post notices in job listings, employee handbook, physical workplace, and company website
-- Maintain a written AI policy
-- Update notices within 30 days when tools change, and regenerate annually
-
-Non-compliance exposes your company to private lawsuits with uncapped damages.
-
-We're building a tool that automates all of this. Enter your email for early access."
-
-**End Screen B** (selected 1-2 tools, not currently providing notice):
-Similar but lighter: "You identified AI tools that likely trigger Illinois disclosure requirements..."
-
-**End Screen C** (already providing notice and has policy):
-"You're ahead of most employers. We're building a tool to automate ongoing monitoring and notice updates as your AI tools change. Enter your email if you'd like to simplify your compliance workflow."
-
-**All end screens include:**
+**Email gate (shown after Q11, before results):**
+- "Enter your email to see your compliance results."
 - Email field (required)
 - Company name (optional)
 - "Which pricing range would you consider for a compliance automation tool?" (optional, single select):
@@ -168,10 +200,41 @@ Similar but lighter: "You identified AI tools that likely trigger Illinois discl
   - I'd prefer a one-time purchase
   - I wouldn't pay for this
 
-#### Step 8: Configure Tally settings
-- [ ] Enable email notifications for new submissions
-- [ ] Set redirect after submission (optional - can redirect back to our site's thank-you page)
-- [ ] Copy the Tally embed code or share URL
+**Results screens (shown AFTER email submission):**
+
+IMPORTANT — UPL (unauthorized practice of law) avoidance:
+- Never say "you are required to" or "you must" or "you are in violation"
+- Frame everything as "HB 3773 requires employers who use AI in employment decisions to..."
+- Use "may trigger" and "based on your responses" language
+- State facts about the law, not legal conclusions about the user's situation
+- Always include disclaimer: "This assessment provides general compliance information, not legal advice. Consult an attorney for specific legal questions."
+
+**Results Screen A** (selected 3+ tools across Q3-Q6 AND answered "No" or "I didn't know" to Q8):
+"Based on your responses, you identified [X] AI-powered tools in your employment process. Illinois HB 3773 (effective January 1, 2026) requires employers who use AI in employment decisions to:
+- Provide written notice to every applicant and employee about each AI tool used
+- Include specific details: tool name, purpose, data collected, decisions affected, contact info
+- Post notices in job listings, employee handbook, physical workplace, and company website
+- Maintain a written AI policy
+- Update notices within 30 days when tools change, and regenerate annually
+
+Under HB 3773, non-compliance may expose employers to private lawsuits with uncapped damages.
+
+We're building a tool to help automate this. We'll be in touch with early access details."
+
+**Results Screen B** (selected 1-2 tools, not currently providing notice):
+"Based on your responses, you identified AI-powered tools that may trigger disclosure requirements under Illinois HB 3773..."
+(Same law summary, lighter framing)
+
+**Results Screen C** (already providing notice and has policy):
+"Based on your responses, you're ahead of most employers on AI compliance. We're building a tool to automate ongoing monitoring and notice updates as your AI tools change. We'll be in touch."
+
+**All results screens include:**
+- Disclaimer: "This assessment provides general compliance information, not legal advice. Consult an attorney for specific legal questions."
+
+#### Step 8: Drop-off / partial submission handling
+- Each question step writes to Google Sheet immediately on advance
+- If a user abandons at Q6, we have Q1-Q5 data + timestamp + session ID + "completed: false"
+- Enables analysis of: which question has highest drop-off, what company sizes start but don't finish, etc.
 
 ---
 
@@ -185,7 +248,7 @@ Claude Code builds a single-page site with these sections:
 - Headline: "Is Your Company Compliant with Illinois's New AI Hiring Law?"
 - Subhead: "If you use Indeed, LinkedIn, Greenhouse, or any AI-powered tool in hiring, Illinois law now requires specific written disclosures to every applicant and employee."
 - CTA Button: "Check My Compliance - Free 2-Min Assessment"
-- Below CTA: "No signup required. See your compliance status instantly."
+- Below CTA: "Free 2-minute assessment. Get your results instantly."
 
 **Problem Section:**
 - "What is HB 3773?"
@@ -213,11 +276,8 @@ Claude Code builds a single-page site with these sections:
 - "Not sure if your tools qualify? Take the free assessment."
 
 **CTA Section (repeat):**
-- Embedded Tally form OR prominent button linking to Tally
-- DECISION NEEDED: Embed form on page vs. link out to Tally hosted form?
-  - Embed: cleaner UX, user stays on our site. Requires Tally embed snippet.
-  - Link out: simpler, but user leaves our domain. Tally forms look clean though.
-  - Recommendation: Embed on the page for better conversion tracking.
+- Scroll-to or anchor link to the embedded assessment form
+- Form is built directly into the page (custom React component, no third-party embed)
 
 **Footer:**
 - "This tool provides compliance information, not legal advice. Consult an attorney for specific legal questions."
@@ -252,7 +312,7 @@ Claude Code builds a single-page site with these sections:
   - Headline 2: "Free 2-Min Compliance Assessment"
   - Headline 3: "HB 3773 - Are You Compliant?"
   - Description: "Illinois now requires written AI disclosure to every applicant. Check if your hiring tools trigger HB 3773. Free assessment - no signup required."
-- [ ] Set up conversion tracking: link click to Tally form = conversion
+- [ ] Set up conversion tracking: assessment completion = conversion
 
 #### Step 12: LinkedIn Ads
 - [ ] Braden: Create LinkedIn Campaign Manager account (linkedin.com/campaignmanager)
@@ -302,11 +362,11 @@ Claude Code builds a single-page site with these sections:
 - Traffic sources (Google Ads vs. LinkedIn vs. organic)
 - Device breakdown (desktop vs. mobile)
 
-**From Tally dashboard:**
-- Total form starts
-- Completion rate
-- Drop-off by question
-- All response data (exportable as CSV)
+**From Google Sheet (assessment data):**
+- Total form starts (rows with any data)
+- Completion rate (rows with completed=true / total rows)
+- Drop-off by question (which step users stopped at)
+- Partial submission data (all answers captured before drop-off)
 - Email signups count
 - Pricing preference distribution
 
@@ -337,14 +397,20 @@ Decision matrix:
 
 ---
 
+## Decisions Made
+
+- **Form tool**: Custom-built React form (no third-party tool). Data goes to Google Sheet.
+- **Email gate**: Required before seeing results.
+- **Partial submissions**: Captured automatically (each step writes to sheet).
+- **Git workflow**: develop branch (preview) + production branch (live). Always push to develop first.
+
 ## Decisions Needed From Braden
 
 1. **Brand name / company name** for the landing page? Or keep it generic/unbranded for the smoke test?
 2. **Domain**: Buy a custom domain (e.g., aihiringcompliance.com) or use Vercel's free URL?
-3. **Tally embed vs. link**: Embed the form on the landing page, or link out to Tally's hosted form?
-4. **Google Ads account**: Do you already have one, or need to create?
-5. **LinkedIn Ads**: Do you have a LinkedIn Campaign Manager account?
-6. **Budget confirmation**: ~$300-500 total across Google + LinkedIn for 2 weeks?
+3. **Google Ads account**: Do you already have one, or need to create?
+4. **LinkedIn Ads**: Do you have a LinkedIn Campaign Manager account?
+5. **Budget confirmation**: ~$300-500 total across Google + LinkedIn for 2 weeks?
 
 ---
 
@@ -376,7 +442,7 @@ ai-hiring-website/
 
 ## Timeline
 
-- Day 1: Build landing page + set up Tally form + deploy to Vercel
+- Day 1: Build landing page + assessment form + Google Sheet integration + deploy to Vercel
 - Day 2: Set up Google Ads + LinkedIn Ads + post organic content
 - Days 3-16: Run ads, monitor daily
 - Day 17: Pull all data, analyze, make go/no-go decision
