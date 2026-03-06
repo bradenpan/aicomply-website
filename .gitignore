@@ -25,6 +25,9 @@ yarn-error.log*
 # internal plans
 google-ads-plan.md
 
+# claude code
+.claude/
+
 # vercel
 .vercel
 
