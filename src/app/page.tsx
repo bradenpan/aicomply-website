@@ -3,7 +3,6 @@ import { Hero } from "@/components/Hero";
 import { Problem } from "@/components/Problem";
 import { Risk } from "@/components/Risk";
 import { Tools } from "@/components/Tools";
-import { Assessment } from "@/components/Assessment";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -14,7 +13,6 @@ export default function Home() {
       <Problem />
       <Tools />
       <Risk />
-      <Assessment />
       <Footer />
     </main>
   );

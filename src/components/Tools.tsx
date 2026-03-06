@@ -1,74 +1,82 @@
-const tools = [
+const categories = [
   {
-    name: "Indeed",
-    detail: "Sponsored Jobs use algorithmic targeting to decide which candidates see your posting. Indeed Resume uses AI matching.",
+    label: "Recruiting",
+    tools: [
+      { name: "Indeed", tag: "AI job targeting & resume matching" },
+      { name: "LinkedIn Recruiter", tag: "AI candidate matching & recommendations" },
+      { name: "Workable", tag: "AI sourcing across 400M+ profiles" },
+    ],
   },
   {
-    name: "LinkedIn Recruiter",
-    detail: "AI-powered candidate matching, job recommendations, and the new AI Hiring Assistant agent.",
+    label: "Screening",
+    tools: [
+      { name: "Greenhouse", tag: "AI resume screening & suggested candidates" },
+      { name: "Workday", tag: "AI candidate matching & automated screening" },
+      { name: "Paradox (Olivia)", tag: "AI chatbot pre-screening & scheduling" },
+    ],
   },
   {
-    name: "Greenhouse",
-    detail: "AI resume screening, AI-suggested candidates, AI-powered matching with Real Talent.",
+    label: "Evaluation",
+    tools: [
+      { name: "HireVue", tag: "AI video analysis & candidate scoring" },
+      { name: "Zoom / Teams / Meet", tag: "AI meeting summaries & notetaking" },
+      { name: "TestGorilla", tag: "AI-scored skills assessments" },
+    ],
   },
   {
-    name: "Workday",
-    detail: "AI-driven hiring tools, skills-based candidate matching, automated screening.",
-  },
-  {
-    name: "HireVue / Spark Hire",
-    detail: "AI video analysis, automated candidate scoring, structured interview evaluation.",
-  },
-  {
-    name: "TestGorilla / Codility",
-    detail: "AI-scored skills assessments, automated candidate ranking and filtering.",
-  },
-  {
-    name: "Paradox (Olivia)",
-    detail: "AI chatbot that pre-screens candidates, schedules interviews, and collects information.",
-  },
-  {
-    name: "Lattice / 15Five",
-    detail: "AI-powered performance insights, review analysis, and compensation recommendations.",
+    label: "Performance",
+    tools: [
+      { name: "Lattice / 15Five", tag: "AI performance insights & reviews" },
+      { name: "PayScale", tag: "AI compensation benchmarking" },
+      { name: "Culture Amp", tag: "AI engagement analytics" },
+    ],
   },
 ];
 
 export function Tools() {
   return (
-    <section className="py-20">
-      <div className="mx-auto max-w-5xl px-6">
-        <h2 className="text-3xl font-bold text-gray-900">
-          These Common Tools Likely Trigger HB&nbsp;3773
-        </h2>
-        <p className="mt-4 max-w-2xl text-lg text-gray-600">
-          Most employers don&apos;t realize their existing software uses AI in
-          ways that require disclosure under Illinois law.
-        </p>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
-          {tools.map((tool) => (
-            <div
-              key={tool.name}
-              className="flex gap-4 rounded-lg border border-gray-200 p-5"
-            >
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100">
-                <span className="text-amber-700 text-xs font-bold">!</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">{tool.name}</h3>
-                <p className="mt-1 text-sm text-gray-600">{tool.detail}</p>
+    <section className="bg-cream-50 py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Do you use any of these?
+          </h2>
+          <p className="mt-4 mx-auto max-w-2xl text-lg text-gray-600">
+            These common tools likely trigger HB&nbsp;3773 disclosure
+            requirements — and most employers don&apos;t realize it.
+          </p>
+        </div>
+        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat) => (
+            <div key={cat.label}>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-teal-600 mb-4">
+                {cat.label}
+              </h3>
+              <div className="space-y-3">
+                {cat.tools.map((tool) => (
+                  <div
+                    key={tool.name}
+                    className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-100"
+                  >
+                    <p className="font-semibold text-gray-900 text-sm">
+                      {tool.name}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">{tool.tag}</p>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-8 text-center">
-          <p className="text-gray-500">
-            Not sure if your tools qualify?
-          </p>
+        <div className="mt-10 text-center">
           <a
             href="#assessment"
-            className="mt-2 inline-block font-semibold text-blue-600 hover:text-blue-700"
+            className="inline-flex items-center gap-2 rounded-lg bg-coral-500 px-6 py-3 font-semibold text-white hover:bg-coral-600 transition-colors"
           >
-            Take the free assessment to find out
+            Not sure? Take the free assessment
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+            </svg>
           </a>
         </div>
       </div>
