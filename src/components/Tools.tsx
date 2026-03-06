@@ -48,7 +48,7 @@ export function Tools() {
             Do you use any of these?
           </h2>
           <p className="mt-4 mx-auto max-w-2xl text-lg text-gray-600">
-            These common tools likely trigger HB&nbsp;3773 disclosure
+            These common tools may trigger HB&nbsp;3773 disclosure
             requirements — and most employers don&apos;t realize it.
           </p>
         </div>
