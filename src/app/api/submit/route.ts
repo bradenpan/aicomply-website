@@ -26,15 +26,9 @@ const VALID_FIELDS: Record<string, string[] | "free_text"> = {
   last_step: "free_text",
   company_size: ["1-49", "50-199", "200-999", "1,000-4,999", "5,000+"],
   illinois_nexus: ["Yes", "No", "Not sure"],
-  auto_screen: ["Yes", "No", "I'm not sure"],
-  written_notice: [
-    "Yes, for all AI tools",
-    "Yes, for some AI tools",
-    "No",
-    "I didn't know this was required",
-  ],
-  written_policy: ["Yes", "No", "We're working on one"],
-  point_of_contact: ["Yes", "No", "I didn't know this was required"],
+  written_notice: ["Yes", "No"],
+  written_policy: ["Yes", "No"],
+  point_of_contact: ["Yes", "No"],
   concern_level: [
     "Very concerned - this is a top priority",
     "Somewhat concerned - it's on my radar",
@@ -42,13 +36,11 @@ const VALID_FIELDS: Record<string, string[] | "free_text"> = {
     "Not concerned at all",
   ],
   // Multi-select fields and free text fields are validated loosely
-  recruiting_tools: "free_text",
-  screening_tools: "free_text",
-  evaluation_tools: "free_text",
+  recruiting_screening_tools: "free_text",
+  interview_evaluation_tools: "free_text",
   performance_comp_tools: "free_text",
   email: "free_text",
   company: "free_text",
-  pricing: "free_text",
   result_screen: "free_text",
 };
 

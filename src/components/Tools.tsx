@@ -1,41 +1,47 @@
+import Image from "next/image";
+
 const categories = [
   {
-    label: "Recruiting",
+    label: "Recruiting & Screening",
     tools: [
-      { name: "Indeed", tag: "AI job targeting & resume matching" },
-      { name: "LinkedIn Recruiter", tag: "AI candidate matching & recommendations" },
-      { name: "Workable", tag: "AI sourcing across 400M+ profiles" },
+      { name: "Indeed", logo: "/logos/indeed.png" },
+      { name: "LinkedIn", logo: "/logos/linkedin.png" },
+      { name: "Greenhouse", logo: "/logos/greenhouse.png" },
+      { name: "Workday", logo: "/logos/workday.png" },
+      { name: "Workable", logo: "/logos/workable.png" },
+      { name: "Paradox (Olivia)", logo: "/logos/paradox.png" },
+      { name: "iCIMS", logo: "/logos/icims.png" },
     ],
   },
   {
-    label: "Screening",
+    label: "Interviews & Evaluation",
     tools: [
-      { name: "Greenhouse", tag: "AI resume screening & suggested candidates" },
-      { name: "Workday", tag: "AI candidate matching & automated screening" },
-      { name: "Paradox (Olivia)", tag: "AI chatbot pre-screening & scheduling" },
+      { name: "HireVue", logo: "/logos/hirevue.png" },
+      { name: "Spark Hire", logo: "/logos/sparkhire.png" },
+      { name: "Zoom AI", logo: "/logos/zoom.png" },
+      { name: "TestGorilla", logo: "/logos/testgorilla.png" },
+      { name: "HackerRank", logo: "/logos/hackerrank.png" },
+      { name: "Otter.ai", logo: "/logos/otter.png" },
+      { name: "Fireflies.ai", logo: "/logos/fireflies.png" },
     ],
   },
   {
-    label: "Evaluation",
+    label: "Performance & Compensation",
     tools: [
-      { name: "HireVue", tag: "AI video analysis & candidate scoring" },
-      { name: "Zoom / Teams / Meet", tag: "AI meeting summaries & notetaking" },
-      { name: "TestGorilla", tag: "AI-scored skills assessments" },
-    ],
-  },
-  {
-    label: "Performance",
-    tools: [
-      { name: "Lattice / 15Five", tag: "AI performance insights & reviews" },
-      { name: "PayScale", tag: "AI compensation benchmarking" },
-      { name: "Culture Amp", tag: "AI engagement analytics" },
+      { name: "Lattice", logo: "/logos/lattice.png" },
+      { name: "15Five", logo: "/logos/15five.png" },
+      { name: "Culture Amp", logo: "/logos/cultureamp.png" },
+      { name: "PayScale", logo: "/logos/payscale.png" },
+      { name: "ADP", logo: "/logos/adp.png" },
+      { name: "BambooHR", logo: "/logos/bamboohr.png" },
+      { name: "Gusto", logo: "/logos/gusto.png" },
     ],
   },
 ];
 
 export function Tools() {
   return (
-    <section className="bg-cream-50 py-20">
+    <section className="bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">
@@ -46,32 +52,42 @@ export function Tools() {
             requirements — and most employers don&apos;t realize it.
           </p>
         </div>
-        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-10 sm:grid-cols-3">
           {categories.map((cat) => (
             <div key={cat.label}>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-teal-600 mb-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-teal-600 mb-5">
                 {cat.label}
               </h3>
               <div className="space-y-3">
                 {cat.tools.map((tool) => (
                   <div
                     key={tool.name}
-                    className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-100"
+                    className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3 ring-1 ring-gray-100"
                   >
-                    <p className="font-semibold text-gray-900 text-sm">
+                    <Image
+                      src={tool.logo}
+                      alt={tool.name}
+                      width={28}
+                      height={28}
+                      className="shrink-0 rounded"
+                    />
+                    <span className="text-sm font-semibold text-gray-800">
                       {tool.name}
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500">{tool.tag}</p>
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-10 text-center">
+        <div className="mt-12 text-center">
+          <p className="text-sm text-gray-500">
+            This is not an exhaustive list — many other tools use AI in ways
+            that may trigger HB&nbsp;3773.
+          </p>
           <a
             href="#assessment"
-            className="inline-flex items-center gap-2 rounded-lg bg-coral-500 px-6 py-3 font-semibold text-white hover:bg-coral-600 transition-colors"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-coral-500 px-6 py-3 font-semibold text-white hover:bg-coral-600 transition-colors"
           >
             Not sure? Take the free assessment
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

@@ -15,18 +15,15 @@ function doPost(e) {
         "last_step",
         "company_size",
         "illinois_nexus",
-        "recruiting_tools",
-        "screening_tools",
-        "evaluation_tools",
+        "recruiting_screening_tools",
+        "interview_evaluation_tools",
         "performance_comp_tools",
-        "auto_screen",
         "written_notice",
         "written_policy",
         "point_of_contact",
         "concern_level",
         "email",
         "company",
-        "pricing",
       ];
       sheet.appendRow(headers);
     }

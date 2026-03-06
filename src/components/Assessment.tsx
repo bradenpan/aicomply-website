@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import Image from "next/image";
 import { questions } from "@/lib/questions";
 import { getResultScreen } from "@/lib/results";
 
@@ -29,7 +30,6 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
   const [otherText, setOtherText] = useState<Record<string, string>>({});
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [pricing, setPricing] = useState("");
   const [emailError, setEmailError] = useState("");
   const sessionId = useRef(generateSessionId());
 
@@ -62,36 +62,36 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
     [step, answers, otherText]
   );
 
-  const handleSingleSelect = (option: string) => {
-    const updated = { ...answers, [question.id]: option };
+  const handleSingleSelect = (optionLabel: string) => {
+    const updated = { ...answers, [question.id]: optionLabel };
     setAnswers(updated);
 
-    if (question.skipIf && option === question.skipIf.answer) {
-      syncToSheet({ [question.id]: option, completed: false, last_step: step + 1 });
+    if (question.skipIf && optionLabel === question.skipIf.answer) {
+      syncToSheet({ [question.id]: optionLabel, completed: false, last_step: step + 1 });
       setPhase("no_illinois");
       return;
     }
 
     if (step < totalSteps - 1) {
-      syncToSheet({ [question.id]: option, last_step: step + 2 });
+      syncToSheet({ [question.id]: optionLabel, last_step: step + 2 });
       setStep(step + 1);
     } else {
-      syncToSheet({ [question.id]: option, last_step: totalSteps });
+      syncToSheet({ [question.id]: optionLabel, last_step: totalSteps });
       setPhase("email");
     }
   };
 
-  const handleMultiToggle = (option: string) => {
+  const handleMultiToggle = (optionLabel: string) => {
     const current = (answers[question.id] as string[]) || [];
-    if (option === "None of the above") {
+    if (optionLabel === "None of the above") {
       setAnswers({ ...answers, [question.id]: ["None of the above"] });
       return;
     }
     const filtered = current.filter((o) => o !== "None of the above");
-    if (filtered.includes(option)) {
-      setAnswers({ ...answers, [question.id]: filtered.filter((o) => o !== option) });
+    if (filtered.includes(optionLabel)) {
+      setAnswers({ ...answers, [question.id]: filtered.filter((o) => o !== optionLabel) });
     } else {
-      setAnswers({ ...answers, [question.id]: [...filtered, option] });
+      setAnswers({ ...answers, [question.id]: [...filtered, optionLabel] });
     }
   };
 
@@ -122,7 +122,6 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
     syncToSheet({
       email: email.trim(),
       company: company.trim(),
-      pricing,
       completed: true,
       last_step: totalSteps,
     });
@@ -131,33 +130,30 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
 
   const isEmbedded = variant === "embedded";
 
-  // Wrapper — embedded version has no section padding, standalone does
-  const Wrapper = ({ children }: { children: React.ReactNode }) =>
-    isEmbedded ? (
-      <div>{children}</div>
-    ) : (
-      <section id="assessment" className="bg-cream-50 py-20">
-        <div className="mx-auto max-w-2xl px-6">{children}</div>
-      </section>
-    );
-
   // No Illinois screen
   if (phase === "no_illinois") {
-    return (
-      <Wrapper>
+    const content = (
+      <>
         <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-lg ring-1 ring-gray-200">
           <h3 className="text-xl font-bold text-gray-900">
-            HB 3773 may not currently apply to your company.
+            This law may not apply to you today — but the landscape is changing fast.
           </h3>
           <p className="mt-4 text-gray-600 leading-relaxed text-sm">
-            Based on your answer, Illinois HB 3773 may not apply to your
-            company at this time. However, if you hire remote workers who could
-            be based in Illinois, you may still be covered. Multiple other
-            states are developing similar AI employment laws.
+            Based on your answer, Illinois HB 3773 may not directly apply to your
+            company. However:
           </p>
-          <p className="mt-3 text-gray-600 leading-relaxed text-sm">
-            Enter your email and we&apos;ll keep you updated as new laws are
-            enacted.
+          <ul className="mt-3 space-y-2 text-sm text-gray-600">
+            <li className="flex gap-2">
+              <span className="text-teal-600 mt-0.5">•</span>
+              <span>If you hire remote workers who could be based in Illinois, you may still be covered</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-teal-600 mt-0.5">•</span>
+              <span>Colorado, New York City, and Maryland already have AI employment laws in effect, and multiple other states are actively considering similar legislation</span>
+            </li>
+          </ul>
+          <p className="mt-4 text-gray-600 leading-relaxed text-sm">
+            Enter your email and we&apos;ll notify you as new laws develop.
           </p>
           <form
             onSubmit={(e) => {
@@ -199,18 +195,23 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
         <p className="mt-4 text-center text-xs text-gray-400">
           This assessment provides general compliance information, not legal advice.
         </p>
-      </Wrapper>
+      </>
+    );
+    return isEmbedded ? <div>{content}</div> : (
+      <section id="assessment" className="bg-cream-50 py-20">
+        <div className="mx-auto max-w-2xl px-6">{content}</div>
+      </section>
     );
   }
 
   // Results screen
   if (phase === "results") {
     const result = getResultScreen(answers);
-    return (
-      <Wrapper>
+    const content = (
+      <>
         <div className="rounded-2xl bg-white p-6 sm:p-8 shadow-lg ring-1 ring-gray-200">
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-50">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-50">
               <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
@@ -220,12 +221,15 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
             </h3>
           </div>
           {result.body.map((paragraph, i) => (
-            <p
+            <div
               key={i}
-              className="mt-3 text-sm text-gray-600 leading-relaxed whitespace-pre-line"
-            >
-              {paragraph}
-            </p>
+              className="mt-3 text-sm text-gray-600 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: paragraph
+                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                  .replace(/\n/g, "<br />"),
+              }}
+            />
           ))}
           <div className="mt-6 rounded-lg bg-teal-50 px-4 py-3">
             <p className="text-sm font-medium text-teal-700">
@@ -237,14 +241,19 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
           This assessment provides general compliance information, not legal
           advice. Consult an attorney for specific legal questions.
         </p>
-      </Wrapper>
+      </>
+    );
+    return isEmbedded ? <div>{content}</div> : (
+      <section id="assessment" className="bg-cream-50 py-20">
+        <div className="mx-auto max-w-2xl px-6">{content}</div>
+      </section>
     );
   }
 
   // Email gate
   if (phase === "email") {
-    return (
-      <Wrapper>
+    const content = (
+      <>
         {!isEmbedded && (
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -283,24 +292,6 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
               placeholder="Company name (optional)"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600"
             />
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                What would you consider paying for a compliance automation tool? (optional)
-              </label>
-              <select
-                value={pricing}
-                onChange={(e) => setPricing(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600"
-              >
-                <option value="">Select...</option>
-                <option value="Under $50/month">Under $50/month</option>
-                <option value="$50-100/month">$50-100/month</option>
-                <option value="$100-200/month">$100-200/month</option>
-                <option value="$200+/month">$200+/month</option>
-                <option value="One-time purchase">I&apos;d prefer a one-time purchase</option>
-                <option value="Wouldn't pay">I wouldn&apos;t pay for this</option>
-              </select>
-            </div>
             <button
               type="submit"
               className="w-full rounded-lg bg-coral-500 px-6 py-3.5 text-base font-bold text-white hover:bg-coral-600 transition-colors"
@@ -312,7 +303,12 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
         <p className="mt-4 text-center text-xs text-gray-400">
           This assessment provides general compliance information, not legal advice.
         </p>
-      </Wrapper>
+      </>
+    );
+    return isEmbedded ? <div>{content}</div> : (
+      <section id="assessment" className="bg-cream-50 py-20">
+        <div className="mx-auto max-w-2xl px-6">{content}</div>
+      </section>
     );
   }
 
@@ -320,8 +316,8 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
   const multiSelected = (answers[question.id] as string[]) || [];
   const progress = ((step + 1) / totalSteps) * 100;
 
-  return (
-    <Wrapper>
+  const content = (
+    <>
       {!isEmbedded && (
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">
@@ -356,24 +352,24 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
         {/* Options */}
         <div className="mt-5 space-y-2.5">
           {question.type === "single"
-            ? question.options.map((option) => (
+            ? question.options.map((opt) => (
                 <button
-                  key={option}
-                  onClick={() => handleSingleSelect(option)}
+                  key={opt.label}
+                  onClick={() => handleSingleSelect(opt.label)}
                   className={`w-full rounded-lg border-2 px-4 py-3.5 text-left text-sm font-medium transition-all ${
-                    answers[question.id] === option
+                    answers[question.id] === opt.label
                       ? "border-teal-600 bg-teal-50 text-teal-800"
                       : "border-gray-200 text-gray-700 hover:border-teal-300 hover:bg-teal-50/50"
                   }`}
                 >
-                  {option}
+                  {opt.label}
                 </button>
               ))
-            : question.options.map((option) => {
-                const checked = multiSelected.includes(option);
+            : question.options.map((opt) => {
+                const checked = multiSelected.includes(opt.label);
                 return (
                   <label
-                    key={option}
+                    key={opt.label}
                     className={`flex cursor-pointer items-center gap-3 rounded-lg border-2 px-4 py-3.5 text-sm font-medium transition-all ${
                       checked
                         ? "border-teal-600 bg-teal-50 text-teal-800"
@@ -383,10 +379,24 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
                     <input
                       type="checkbox"
                       checked={checked}
-                      onChange={() => handleMultiToggle(option)}
-                      className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      onChange={() => handleMultiToggle(opt.label)}
+                      className="h-4 w-4 shrink-0 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                     />
-                    {option}
+                    {opt.logos && opt.logos.length > 0 && (
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        {opt.logos.map((logo) => (
+                          <Image
+                            key={logo}
+                            src={logo}
+                            alt=""
+                            width={20}
+                            height={20}
+                            className="rounded"
+                          />
+                        ))}
+                      </span>
+                    )}
+                    <span>{opt.label}</span>
                   </label>
                 );
               })}
@@ -403,7 +413,7 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
                 type="checkbox"
                 checked={multiSelected.includes("Other")}
                 onChange={() => handleMultiToggle("Other")}
-                className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                className="h-4 w-4 shrink-0 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
               />
               Other (please specify)
             </label>
@@ -452,6 +462,12 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
       <p className="mt-4 text-center text-xs text-gray-400">
         This assessment provides general compliance information, not legal advice.
       </p>
-    </Wrapper>
+    </>
+  );
+
+  return isEmbedded ? <div>{content}</div> : (
+    <section id="assessment" className="bg-cream-50 py-20">
+      <div className="mx-auto max-w-2xl px-6">{content}</div>
+    </section>
   );
 }
