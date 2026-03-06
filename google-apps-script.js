@@ -13,6 +13,7 @@ function doPost(e) {
         "timestamp",
         "completed",
         "last_step",
+        "company_type",
         "company_size",
         "illinois_nexus",
         "recruiting_screening_tools",
@@ -24,6 +25,7 @@ function doPost(e) {
         "concern_level",
         "email",
         "company",
+        "title",
       ];
       sheet.appendRow(headers);
     }

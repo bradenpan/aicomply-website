@@ -30,6 +30,7 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
   const [otherText, setOtherText] = useState<Record<string, string>>({});
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
+  const [title, setTitle] = useState("");
   const [emailError, setEmailError] = useState("");
   const sessionId = useRef(generateSessionId());
 
@@ -122,6 +123,7 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
     syncToSheet({
       email: email.trim(),
       company: company.trim(),
+      title: title.trim(),
       completed: true,
       last_step: totalSteps,
     });
@@ -290,6 +292,13 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Company name (optional)"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600"
+            />
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Your title (optional)"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600"
             />
             <button

@@ -24,6 +24,7 @@ const VALID_FIELDS: Record<string, string[] | "free_text"> = {
   timestamp: "free_text",
   completed: "free_text",
   last_step: "free_text",
+  company_type: ["Employer", "Recruiting or staffing agency"],
   company_size: ["1-49", "50-199", "200-999", "1,000-4,999", "5,000+"],
   illinois_nexus: ["Yes", "No", "Not sure"],
   written_notice: ["Yes", "No"],
@@ -41,6 +42,7 @@ const VALID_FIELDS: Record<string, string[] | "free_text"> = {
   performance_comp_tools: "free_text",
   email: "free_text",
   company: "free_text",
+  title: "free_text",
   result_screen: "free_text",
 };
 

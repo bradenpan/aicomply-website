@@ -16,6 +16,15 @@ export interface Question {
 
 export const questions: Question[] = [
   {
+    id: "company_type",
+    text: "Which best describes your company?",
+    type: "single",
+    options: [
+      { label: "Employer" },
+      { label: "Recruiting or staffing agency" },
+    ],
+  },
+  {
     id: "company_size",
     text: "How many employees does your company have?",
     type: "single",
