@@ -13,14 +13,22 @@ export function Footer() {
           <p className="text-sm text-gray-400">
             &copy; {new Date().getFullYear()} AIComply
           </p>
-          <a
-            href="https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB&LegId=152813&SessionID=112"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-teal-600 hover:text-teal-700"
-          >
-            Read the full text of HB&nbsp;3773
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href="/privacy"
+              className="text-sm text-teal-600 hover:text-teal-700"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3773&GAID=17&DocTypeID=HB&LegId=152813&SessionID=112"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-teal-600 hover:text-teal-700"
+            >
+              Read the full text of HB&nbsp;3773
+            </a>
+          </div>
         </div>
       </div>
     </footer>

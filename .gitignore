@@ -22,6 +22,9 @@ yarn-error.log*
 .env
 .env*.local
 
+# internal plans
+google-ads-plan.md
+
 # vercel
 .vercel
 

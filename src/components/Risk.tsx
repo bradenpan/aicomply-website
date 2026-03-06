@@ -1,23 +1,18 @@
 const risks = [
   {
-    stat: "$70K",
-    label: "per violation",
-    description: "Civil penalties up to $70,000 for repeat offenders under the Illinois Human Rights Act.",
-  },
-  {
-    stat: "2 years",
-    label: "to file",
-    description: "Applicants have up to 2 years to file a charge after the alleged discrimination.",
+    stat: "$16K–$70K",
+    label: "per person, per violation",
+    description: "State-imposed civil penalties for each aggrieved person, each violation. 50 rejected applicants could mean 50 separate violations.",
   },
   {
     stat: "Uncapped",
-    label: "damages",
-    description: "No cap on actual damages, back pay, or attorneys' fees. Class actions are possible.",
+    label: "compensatory damages",
+    description: "No cap on actual damages, including emotional distress, back pay, lost benefits, and attorney's fees. Unlike federal Title VII, which caps at $50K–$300K.",
   },
   {
-    stat: "Strict",
-    label: "liability",
-    description: "Liable even if you didn't know your tool used AI or that it was discriminating.",
+    stat: "AG action",
+    label: "up to $100K per violation",
+    description: "The Illinois Attorney General can independently bring pattern-and-practice actions with fines up to $100,000 per violation — no individual complaint required.",
   },
 ];
 
@@ -32,7 +27,7 @@ export function Risk() {
             employment law.
           </p>
         </div>
-        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-8 sm:grid-cols-3">
           {risks.map((risk) => (
             <div key={risk.stat} className="text-center">
               <p className="text-4xl font-bold text-coral-500">{risk.stat}</p>

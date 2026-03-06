@@ -39,7 +39,7 @@ export function getResultScreen(answers: Record<string, string | string[]>): Res
     body: [
       "Under Illinois HB 3773 (effective January 1, 2026), disclosure requirements include:",
       "1. **Job listings** — AI tool use must be disclosed in every job posting\n2. **Handbook, workplace, and website** — Written notices must be posted in your employee handbook, physical workplace, and company website\n3. **Ongoing updates** — Notices must be updated within 30 days whenever a tool changes",
-      "Non-compliance carries fines and may open your company to employment lawsuits.",
+      "Non-compliance may lead to fines of up to $70,000 per person per violation, civil actions, and/or uncapped liability in private lawsuits.",
     ],
     cta: "We're building a tool to automate review and disclosure. We'll reach out with early access details.",
   };
