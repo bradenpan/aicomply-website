@@ -5,6 +5,22 @@ import Image from "next/image";
 import { questions } from "@/lib/questions";
 import { getResultScreen } from "@/lib/results";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+function trackConversion() {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-17998193382/kD3yCJKi-YMcEObFmoZD",
+      value: 1.0,
+      currency: "USD",
+    });
+  }
+}
+
 function generateSessionId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
@@ -127,6 +143,7 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
       completed: true,
       last_step: totalSteps,
     });
+    trackConversion();
     setPhase("results");
   };
 
@@ -167,6 +184,7 @@ export function Assessment({ variant = "standalone" }: AssessmentProps) {
                   completed: true,
                   result_screen: "no_illinois",
                 });
+                trackConversion();
               }
               setPhase("results");
             }}
