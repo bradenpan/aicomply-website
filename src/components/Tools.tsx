@@ -41,7 +41,7 @@ const categories = [
 
 export function Tools() {
   return (
-    <section className="bg-white py-20">
+    <section id="tools" className="bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">

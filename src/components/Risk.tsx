@@ -18,7 +18,7 @@ const risks = [
 
 export function Risk() {
   return (
-    <section className="bg-teal-800 py-20 text-white">
+    <section id="penalties" className="bg-teal-800 py-20 text-white">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
           <h2 className="text-3xl font-bold">What&apos;s at stake</h2>
